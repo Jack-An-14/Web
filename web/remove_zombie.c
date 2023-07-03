@@ -17,5 +17,32 @@ int main(int argc, char* argv[]){
     pid_t pid;
     struct sigaction act;
     act.sa_handler = read_childproc;
-    __sigemptyset
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = 0;
+    sigaction(SIGCHLD, &act, 0);
+
+    pid = fork();
+    //子进程执行区域
+    if (pid == 0) {
+        puts("Hi! I'm child process");
+        sleep(10);
+        return 12;
+    } else {    //父进程的执行区域
+        printf("Child proc id: %d \n", pid);
+        pid = fork();
+        if (pid == 0) { //另一子进程的执行区域
+            puts("Hi! I'm child process");
+            sleep(10);
+            exit(24);
+        } else {
+            int i;
+            printf("Child proc id: %d \n", pid);
+            for (i = 0; i < 5; i++) {
+                puts("wait...");
+                sleep(5);
+            }
+        }
+    }
+
+    return 0;
 }
