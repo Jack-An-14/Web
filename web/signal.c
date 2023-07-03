@@ -17,6 +17,7 @@ void keycontrol(int sig){
 
 int main(int argc, char* argv[]){
     int i;
+    //注册新号
     signal(SIGALRM, timeout);
     signal(SIGINT, keycontrol);
     alarm(2);
